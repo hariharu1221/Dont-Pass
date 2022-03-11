@@ -1,0 +1,10 @@
+moveSize,score,tempo,EnemyDir,EnemyState,second
+1,100,0.7,R,Normal,0.4
+1,100,0.7,L,Normal,0.4
+1,100,0.7,L,Normal,0.4
+1,100,0.7,L,Normal,0.4
+1,100,0.7,R,Normal,0.4
+1,200,1,R,BothTouch,0.4
+1,100,0.7,R,Normal,0.4
+1,100,0.7,L,Normal,0.4
+1,100,0.7,R,Normal,0.4
