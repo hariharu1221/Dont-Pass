@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class GetChar : MonoBehaviour
 {
-    public static Charater getchar(int index)
+    public static Charater getchar(int index, GameObject ob)
     {
-        if (index == 0) return new NormalChar();
-        else if (index == 1) return new BonusChar();
-        return new NormalChar();
+        if (index == 0) ob.AddComponent<NormalChar>();
+        else if (index == 1) ob.AddComponent<BonusChar>();
+        else if (index == 2) ob.AddComponent<LineClear>();
+        else if (index == 3) ob.AddComponent<AllLineClear>();
+        return ob.GetComponent<Charater>();
     }
 }
 

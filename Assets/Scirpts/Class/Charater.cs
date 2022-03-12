@@ -26,27 +26,45 @@ public abstract class Charater : MonoBehaviour
         set { hp = value; }
     }
 
-    [SerializeField] protected float cool;
-    public float Cool
+    [SerializeField] protected CoolTime cool;
+    public CoolTime Cool
     {
         get { return cool; }
         set { cool = value; }
     }
 
-    bool canUseSkill = true;
-
-    public void UseSkill()
+    private void Awake()
     {
-        if (!canUseSkill) return;
-        StartCoroutine(CoolTime());
+        Set();
+    }
+
+    protected abstract void Set();
+
+    public void UseSkill() //엑티브 스킬 사용
+    {
+        if (Cool.isCool) return;
+        StartCoroutine(Cool.Cool());
         Skill();
     }
 
-    protected abstract void Skill();
-    IEnumerator CoolTime()
+    protected virtual void Skill()
     {
-        canUseSkill = false;
-        yield return new WaitForSeconds(cool);
+
+    }
+
+    public void SwitchSkill()
+    {
+
+    }
+
+    public virtual void Passive() //항상 유지 되는 패시브
+    {
+
+    }
+
+    public virtual void ActivationPassive() //현재 캐릭터가 이 캐릭터일 경우 실행되는 활성화 패시브
+    {
+
     }
 }
 

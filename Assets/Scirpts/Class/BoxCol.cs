@@ -20,36 +20,52 @@ public class BoxCol : MonoBehaviour
 
     public EnemyDir dir;
     public EnemyState state;
-    public float mult;
-    public float sumScore;
-    public int sumEnemyCount;
-    public bool attack;
+    private float attackMult;
+    private float allMult;  
+    private float sumScore;
+    private int sumEnemyCount;
+    private bool attack;
 
-    public void Awake()
+    public float AttackMult { get { return attackMult; } set { attackMult = value; } }
+    public float AllMult { get { return allMult; } set { allMult = value; } }
+
+    private void Awake()
     {
         col = GetComponent<BoxCollider2D>();
         sumScore = 0;
         sumEnemyCount = 0;
+        allMult = 1;
+        attackMult = 1;
         attack = false;
     }
 
-    public void AttackEnemy(EnemyDir dir, EnemyState state, float mult)
+    public void AttackEnemy(EnemyDir dir, EnemyState state)
     {
         this.dir = dir;
         this.state = state;
-        this.mult = mult;
         attack = true;
     }
 
-    public int PlusScoreWithCount(ref float score, ref int enemyCount)
+    public int PlusCount(ref int enemyCount)
+    {
+        int result = sumEnemyCount;
+        enemyCount += sumEnemyCount;
+        sumEnemyCount = 0;
+        return result;
+    }
+
+    public float PlusScore(ref float score)
+    {
+        sumScore *= allMult;
+        float result = sumScore;
+        score += sumScore;
+        sumScore = 0;
+        return result;
+    }
+
+    public void StopAttack()
     {
         attack = false;
-
-        score += sumScore;
-        enemyCount += sumEnemyCount;
-        sumScore = 0;
-        sumEnemyCount = 0;
-        return sumEnemyCount;
     }
 
     public void OnTriggerStay2D(Collider2D other)
@@ -59,7 +75,7 @@ public class BoxCol : MonoBehaviour
             EnemyMono enemy = other.GetComponent<EnemyMono>();
             if (enemy.AttackCheck(dir, state))
             {
-                sumScore += enemy.enemyState.score * mult;
+                sumScore += enemy.enemyState.score * attackMult;
                 sumEnemyCount++;
                 enemy.Damaged();
             }

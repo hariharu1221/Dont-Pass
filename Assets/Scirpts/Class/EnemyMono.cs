@@ -43,11 +43,7 @@ public class EnemyMono : MonoBehaviour
         if((enemyState.dir == EnemyDir.R && transform.position.x > 8.64f)
             || (enemyState.dir == EnemyDir.L && transform.position.x < -8.64f))
         {
-            isEscape = true;
-            canMove = false;
-            DOTween.To(() => transform.localScale, x => transform.localScale = x, new Vector3(0f, 0f), 0.5f);
-            StartCoroutine(Utils.DelayDestroy(gameObject, 0.8f));
-            GetComponent<Collider2D>().enabled = false;
+            Death();
         }
     }
 
@@ -61,6 +57,14 @@ public class EnemyMono : MonoBehaviour
 
     public void Damaged()
     {
+        enemyState.hp--;
+        if (enemyState.hp <= 0) Death();
+    }
+
+    public void Death()
+    {
+        if (isEscape) return;
+        gameObject.GetComponentInParent<LineCol>().OutEnemy(this);
         isEscape = true;
         DOTween.To(() => transform.localScale, x => transform.localScale = x, new Vector3(0f, 0f), 0.2f);
         StartCoroutine(Utils.DelayDestroy(gameObject, 0.25f));

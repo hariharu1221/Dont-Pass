@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class LineCol : MonoBehaviour
 {
-    private List<Enemy> onEnemies;
+    private List<EnemyMono> onEnemies;
 
     private Line line;
     public Line Line
@@ -22,22 +23,35 @@ public class LineCol : MonoBehaviour
 
     public void Awake()
     {
-        onEnemies = new List<Enemy>();
+        onEnemies = new List<EnemyMono>();
         col = GetComponent<BoxCollider2D>();
     }
 
-    public void InEnemy(Enemy enemy)
+    public void InEnemy(EnemyMono enemy)
     {
         onEnemies.Add(enemy);
     }
 
-    public void OutEnemy(Enemy enemy)
+    public void OutEnemy(EnemyMono enemy)
     {
         onEnemies.Remove(enemy);
     }
 
-    public bool SearchEnemy(Enemy enemy)
+    public bool SearchEnemy(EnemyMono enemy)
     {
         return onEnemies.Contains(enemy);
+    }
+
+    public void LineClear()
+    {
+        List<EnemyMono> copy = onEnemies.ToList();
+        foreach(var enemy in copy)
+        {
+            enemy.Death();
+        }
+        //for (int i = o.Count; i >= 0; i--)
+        //{
+        //    onEnemies[i].Death();
+        // }
     }
 }

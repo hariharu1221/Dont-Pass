@@ -5,16 +5,16 @@ using UnityEngine;
 [System.Serializable]
 public class Enemy
 {
-    public int moveSize;
+    public int hp;
     public float score;
     public float tempo;
     public EnemyDir dir;
     public EnemyState state;
     public int index;
 
-    public Enemy(int moveSize, float score, float tempo, EnemyDir dir, EnemyState state, int index)
+    public Enemy(int hp, float score, float tempo, EnemyDir dir, EnemyState state, int index)
     {
-        this.moveSize = moveSize;
+        this.hp = hp;
         this.score = score;
         this.tempo = tempo;
         this.dir = dir;

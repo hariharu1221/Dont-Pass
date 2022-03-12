@@ -26,20 +26,29 @@ public class GameManager : Singleton<GameManager>
     private FixedPatternList patternString;
     private List<FixedPattern> patternList;
 
-    List<LineCol> line = new List<LineCol>();
-    List<BoxCol> hitbox = new List<BoxCol>();
+    private List<LineCol> line = new List<LineCol>();
+    private List<BoxCol> hitbox = new List<BoxCol>();
 
     private int hp;
     private int gold;
     private int enemyCount;
     private float score;
+    private float allMult;
     private bool isGame;
 
-    private float multScore;
     private Button StartButton;
     private Button SwitchButton;
 
+    public List<LineCol> Line { get { return line; } }
+    public float AllMult { get { return allMult; } set { allMult = value; } }
+
     private void Awake()
+    {
+        SetInstance();
+        VariableSet();
+    }
+
+    private void VariableSet()
     {
         linecolPrefab = Resources.Load<GameObject>("Prefabs/LineCol");
         linecolGroup = GameObject.Find("LineColGroup");
@@ -54,6 +63,7 @@ public class GameManager : Singleton<GameManager>
         hitboxGroup = GameObject.Find("HitBoxGroup");
 
         enemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy");
+        charPrefab = Resources.Load<GameObject>("Prefabs/Charater");
 
         patternString = Resources.Load<FixedPatternList>("SO/FixedPatternList");
         patternList = patternString.ReadAll();
@@ -80,7 +90,6 @@ public class GameManager : Singleton<GameManager>
         if (!isGame) return;
         GetKey();
         Debug.Log(score);
-        Debug.Log(enemyCount);
     }
 
     private void GetKey()
@@ -96,6 +105,10 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             Switch();
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            UseSkill();
         }
     }
 
@@ -120,17 +133,22 @@ public class GameManager : Singleton<GameManager>
 
     private void Set() //게임 시작시 세팅
     {
-        OneChar = GetChar.getchar(0);
-        TwoChar = GetChar.getchar(1);
+        var one = Instantiate(charPrefab);
+        var two = Instantiate(charPrefab);
+        OneChar = GetChar.getchar(0, one);
+        TwoChar = GetChar.getchar(1, two);
 
         NowChar = OneChar;
         hp = OneChar.Hp + TwoChar.Hp;
         gold = 0;
         score = 0;
-        multScore = 1;
+        allMult = 1;
 
         normalMiss = false;
         bothMiss = false;
+
+        OneChar.Passive();
+        TwoChar.Passive();
 
         AddLine();
         SetHitBox();
@@ -152,7 +170,7 @@ public class GameManager : Singleton<GameManager>
         yield return null;
     }
 
-    private IEnumerator InLine(LineCol line)
+    private IEnumerator InLine(LineCol line) //라인마다 패턴 대입
     {
         yield return new WaitForSeconds(1f);
         while(hp > 0)
@@ -180,13 +198,11 @@ public class GameManager : Singleton<GameManager>
         if (normalMiss && state == EnemyState.Normal) yield break;
 
         foreach(BoxCol i in hitbox)
-            i.AttackEnemy(dir, state, multScore);
+            i.AttackEnemy(dir, state);
 
         yield return new WaitForSeconds(0.025f);
 
-        int sum = 0;
-        foreach (BoxCol i in hitbox)
-            sum += i.PlusScoreWithCount(ref score, ref enemyCount);
+        int sum = GetScoreWithCount();
 
         if (sum == 0)
         {
@@ -204,12 +220,12 @@ public class GameManager : Singleton<GameManager>
     {
         normalMiss = true;
         bothMiss = true;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.3f);
         normalMiss = false;
         bothMiss = false;
     }
 
-    private void SpawnEnemy(Enemy enemy, LineCol line)
+    private void SpawnEnemy(Enemy enemy, LineCol line) //적 생성
     {
         var n = Instantiate(enemyPrefab, line.gameObject.transform);
         var e = n.AddComponent<EnemyMono>();
@@ -217,9 +233,10 @@ public class GameManager : Singleton<GameManager>
         e.EnemyState = enemyState;
 
         SetEnemy(e, line);
+        line.InEnemy(e);
     }
 
-    private void SetEnemy(EnemyMono enemy, LineCol line)
+    private void SetEnemy(EnemyMono enemy, LineCol line) //스테이트에 맞는 적 정보 입력
     {
         var enemyState = enemy.EnemyState;
 
@@ -237,6 +254,18 @@ public class GameManager : Singleton<GameManager>
 
         enemy.transform.localScale = Vector3.zero;
         DOTween.To(() => enemy.transform.localScale, x => enemy.transform.localScale = x, new Vector3(0.1f, 0.1f), 0.5f);
+    }
+
+    private int GetScoreWithCount()
+    {
+        int sum = 0;
+        foreach (BoxCol i in hitbox)
+        {
+            i.StopAttack();
+            i.PlusScore(ref score);
+            sum += i.PlusCount(ref enemyCount);
+        }
+        return sum;
     }
 
     private void AddLine() //라인 추가
@@ -304,7 +333,6 @@ public class GameManager : Singleton<GameManager>
             DOTween.To(() => box.Box.Rect.sizeDelta, x => box.Box.Rect.sizeDelta = x, new Vector2(box.Box.Rect.sizeDelta.x, 0), 1f);
             StartCoroutine(Utils.DelayDestroy(box.Box.gameObject, 1.5f));
             Destroy(box.gameObject);
-            //hitbox.Remove(box);
         }
         hitbox.Clear();
     }
@@ -332,14 +360,24 @@ public class GameManager : Singleton<GameManager>
         }
 
         hitbox = list;
+        SetScoreBonus();
+    }
+
+    private void SetScoreBonus()
+    {
+        foreach (var col in hitbox)
+        {
+            col.AllMult = allMult;
+        }
     }
 
     private void DestroyLine() //게임 끝났을 때 타일 제거
     {
-        for (int i = 0; i < line.Count; i++) 
+        foreach(var line in line)
         {
-            Destroy(line[i].Line.gameObject);
-            Destroy(line[i].Col);
+            DOTween.To(() => line.Line.Rect.sizeDelta, x => line.Line.Rect.sizeDelta = x, new Vector2(0, 5), 1f);
+            StartCoroutine(Utils.DelayDestroy(line.Line.gameObject, 1.5f));
+            Destroy(line.Col);
         }
         line.Clear();
     }
@@ -350,21 +388,24 @@ public class GameManager : Singleton<GameManager>
         isGame = false;
         StopAllCoroutines();
         DestroyLine();
+        DestroyBox();
     }
 
     private void Switch() //현재 캐릭터 스위치 1 to 2, 2 to 1
     {
         if (NowChar.GetType() == OneChar.GetType())
-        {
             NowChar = TwoChar;
-        }
         else if (NowChar.GetType() == TwoChar.GetType())
-        {
             NowChar = OneChar;
-        }
+
         DestroyBox();
         SetHitBox();
     } 
+
+    private void UseSkill()
+    {
+        NowChar.UseSkill();
+    }
 }
 
 //[인게임 추가할 것]
@@ -372,7 +413,7 @@ public class GameManager : Singleton<GameManager>
 //드래그로 스위치
 
 //[스킬 목록]
-//모든 라인 클리어 (점수 획득 가능)                               (쿨타임 30초) S
+//모든 라인 클리어 (점수 획득 가능)                               (쿨타임 30초) S Clear
 //5초간 시야 축소 이후 라인클리어 20초간 점수 보너스 && 적이 커짐 (쿨타임 40초) S
 //5초간 판정 범위 축소 이후 20초간 판정 범위가 전체로 변경        (쿨타임 40초) S
 //10초간 판정 범위에 닿는 것 만으로 지움                          (쿨타임 30초) S
@@ -386,8 +427,8 @@ public class GameManager : Singleton<GameManager>
 //모든 라인 속도 빨라짐 && 점수 보너스                            (스킬 상시)   B
 //골드 보너스                                                     (스킬 상시)   B
 //보호막 생성                                                     (쿨타임 15초) B
-//랜덤 라인 클리어 (점수 획득 가능)                               (쿨타임 15초) B
-//점수 보너스                                                     (스킬 상시)   B
+//랜덤 라인 클리어 (점수 획득 가능)                               (쿨타임 15초) B Clear
+//점수 보너스                                                     (스킬 상시)   B Clear
 
 //[상점에서 팔 것]
 //배경
