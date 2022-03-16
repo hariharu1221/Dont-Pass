@@ -36,9 +36,6 @@ public class GameManager : Singleton<GameManager>
     private float allMult;
     private bool isGame;
 
-    private Button StartButton;
-    private Button SwitchButton;
-
     public List<LineCol> Line { get { return line; } }
     public float AllMult { get { return allMult; } set { allMult = value; } }
 
@@ -69,17 +66,14 @@ public class GameManager : Singleton<GameManager>
         patternList = patternString.ReadAll();
 
         canvas = GameObject.Find("Canvas");
-
-        StartButton = GameObject.Find("StartButton").GetComponent<Button>();
-        StartButton.onClick.AddListener(() => StartGame());
-
-        SwitchButton = GameObject.Find("SwitchButton").GetComponent<Button>();
-        SwitchButton.onClick.AddListener(() => Switch());
-
-        GameObject.Find("AddButton").GetComponent<Button>().onClick.AddListener(() => AddLine()); //지우기
         isGame = false;
     }
 
+    private void Start()
+    {
+        StartGame();
+    }
+     
     private void Update()
     {
         InGameUpdate();
@@ -136,7 +130,7 @@ public class GameManager : Singleton<GameManager>
         var one = Instantiate(charPrefab);
         var two = Instantiate(charPrefab);
         OneChar = GetChar.getchar(0, one);
-        TwoChar = GetChar.getchar(1, two);
+        TwoChar = GetChar.getchar(3, two);
 
         NowChar = OneChar;
         hp = OneChar.Hp + TwoChar.Hp;
@@ -159,7 +153,7 @@ public class GameManager : Singleton<GameManager>
         //게임 시작 이펙트
         while(hp > 0)
         {
-            if (enemyCount >= 200 * Mathf.Pow(line.Count, 2)) // 1 4 9 16 25 36
+            if (enemyCount >= 50 * Mathf.Pow(line.Count, 2.5f) && line.Count < 5) // 1 4 9 16 25 36
             {
                 AddLine();
             }
@@ -389,6 +383,7 @@ public class GameManager : Singleton<GameManager>
         StopAllCoroutines();
         DestroyLine();
         DestroyBox();
+        //결과 합산 후 ui를 통한 씬 전환
     }
 
     private void Switch() //현재 캐릭터 스위치 1 to 2, 2 to 1
@@ -413,22 +408,26 @@ public class GameManager : Singleton<GameManager>
 //드래그로 스위치
 
 //[스킬 목록]
-//모든 라인 클리어 (점수 획득 가능)                               (쿨타임 30초) S Clear
-//5초간 시야 축소 이후 라인클리어 20초간 점수 보너스 && 적이 커짐 (쿨타임 40초) S
-//5초간 판정 범위 축소 이후 20초간 판정 범위가 전체로 변경        (쿨타임 40초) S
-//10초간 판정 범위에 닿는 것 만으로 지움                          (쿨타임 30초) S
-//스위치 시 10초 무적                                             (쿨타임 40초) S
-//10% 확률로 적이 등장할 때 마다 적용 해당 적을 빨간 적으로 변경  (스킬 상시)   S
-//랜덤 라인 속도 느려지기 && 점수 보너스                          (스킬 상시)   A
-//10초간 판정 범위 확대 && 점수 보너스                            (쿨타임 20초) A
-//랜덤 라인 5초간 제외하기                                        (쿨타임 10초) A
-//5초 무적                                                        (쿨타임 30초) A
-//한 라인을 제외한 다른 모든 라인 정지 && 점수 보너스             (쿨타임 25초) A
-//모든 라인 속도 빨라짐 && 점수 보너스                            (스킬 상시)   B
-//골드 보너스                                                     (스킬 상시)   B
-//보호막 생성                                                     (쿨타임 15초) B
-//랜덤 라인 클리어 (점수 획득 가능)                               (쿨타임 15초) B Clear
-//점수 보너스                                                     (스킬 상시)   B Clear
+//
+//(이 스킬은 음과 양의 상태가 존재하며 두 개의 스킬로 취급 합니다.) SS //다이아 only
+//(음의 상태) 기본 지속 효과 : 점수 50% 보너스, 엑티브 효과: 스킬 사용시 모든 라인 클리어 (점수 절반 획득) 이후 재사용 시간동안 기본 지속 효과 비활성화 (쿨타임 30초)
+//(양의 상태) 기본 지속 효과 : 골드 50% 보너스, 엑티브 효과: 스킬 사용시 모든 적의 크기가 커지며 처치시 4배의 점수를 획득 이후 재사용 시간동안 기본 지속 효과 비활성화 (쿨타임 15초)
+//모든 라인 클리어 (점수 1.5배 획득)                              (쿨타임 30초) S Clear //누적 타일 15000개 제거
+//5초간 시야 축소 이후 라인클리어 20초간 점수 보너스 && 적이 커짐 (쿨타임 40초) S //
+//5초간 판정 범위 축소 이후 15초간 판정 범위가 전체로 변경        (쿨타임 40초) S //판정 증가 아이템 20회 구매
+//10초간 판정 범위에 닿는 것 만으로 지움                          (쿨타임 30초) S //별점 5점시 획득
+//스위치 시 10초 무적                                             (쿨타임 20초) S //체력 증가 아이템 20회 구매
+//10% 확률로 적이 등장할 때 마다 적용 해당 적을 빨간 적으로 변경  (스킬 상시)   S //
+//랜덤 라인 속도 느려지기 && 점수 보너스                          (스킬 상시)   A //
+//10초간 판정 범위 확대 && 점수 보너스                            (쿨타임 20초) A //
+//랜덤 라인 5초간 제외하기                                        (쿨타임 10초) A //
+//5초 무적                                                        (쿨타임 30초) A //누적 100번 피격
+//한 라인을 제외한 다른 모든 라인 정지 && 점수 보너스             (쿨타임 25초) A //
+//모든 라인 속도 빨라짐 && 점수 보너스                            (스킬 상시)   B //누적 10분간 플레이
+//50%의 골드 보너스                                               (스킬 상시)   B //누적 10000골드 획득
+//5초간 보호막 생성                                               (쿨타임 15초) B //누적 50번 피격
+//랜덤 라인 클리어 (점수 획득 가능)                               (쿨타임 15초) B Clear //누적 타일 1000개 제거
+//50%의 점수 보너스                                               (스킬 상시)   B Clear //누적 75000점 획득
 
 //[상점에서 팔 것]
 //배경

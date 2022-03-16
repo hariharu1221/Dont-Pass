@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   list:
   - FixedPattern/Pattern_1
+  - FixedPattern/Pattern_2

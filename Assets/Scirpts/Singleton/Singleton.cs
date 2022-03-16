@@ -21,6 +21,12 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     public void SetInstance()
     {
+        if (instance != null)
+        {
+            Destroy(instance.gameObject);
+            return;
+        }
+
         if (instance == null)
         {
             instance = FindObjectOfType(typeof(T)) as T;
