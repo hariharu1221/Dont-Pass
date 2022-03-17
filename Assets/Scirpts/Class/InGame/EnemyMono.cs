@@ -20,7 +20,6 @@ public class EnemyMono : MonoBehaviour
         isEscape = false;
     }
 
-
     private void Update()
     {
         if (isEscape) return;

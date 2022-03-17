@@ -7,10 +7,13 @@ using DG.Tweening;
 
 public class GameManager : Singleton<GameManager>
 {
+    #region VARIABLE
+    //CHARATER
     private Charater OneChar;
     private Charater TwoChar;
     private Charater NowChar;
 
+    //PREFABS
     private GameObject linecolPrefab;
     private GameObject linecolGroup;
     private GameObject linePrefab;
@@ -21,23 +24,26 @@ public class GameManager : Singleton<GameManager>
     private GameObject hitboxGroup;
     private GameObject charPrefab;
     private GameObject enemyPrefab;
-    private GameObject canvas;
 
+    //PATTERN
     private FixedPatternList patternString;
     private List<FixedPattern> patternList;
 
-    private List<LineCol> line = new List<LineCol>();
     private List<BoxCol> hitbox = new List<BoxCol>();
 
+    private List<LineCol> line = new List<LineCol>();
+    public List<LineCol> Line { get { return line; } }
+
+    //GAMEINFO
     private int hp;
     private int gold;
     private int enemyCount;
     private float score;
-    private float allMult;
     private bool isGame;
 
-    public List<LineCol> Line { get { return line; } }
+    private float allMult;
     public float AllMult { get { return allMult; } set { allMult = value; } }
+    #endregion
 
     private void Awake()
     {
@@ -65,7 +71,6 @@ public class GameManager : Singleton<GameManager>
         patternString = Resources.Load<FixedPatternList>("SO/FixedPatternList");
         patternList = patternString.ReadAll();
 
-        canvas = GameObject.Find("Canvas");
         isGame = false;
     }
 

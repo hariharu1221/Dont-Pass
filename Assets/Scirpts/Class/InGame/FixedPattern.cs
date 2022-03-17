@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class FixedPattern//
+public class FixedPattern
 {
     private float lengthTime;
     public float LengthTime { get { return lengthTime; }  set { lengthTime = value; } }
