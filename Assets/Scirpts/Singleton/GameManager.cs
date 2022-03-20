@@ -5,13 +5,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : DestructibleSingleton<GameManager>
 {
     #region VARIABLE
     //CHARATER
-    private Charater OneChar;
-    private Charater TwoChar;
-    private Charater NowChar;
+    private SkillMono OneChar;
+    private SkillMono TwoChar;
+    private SkillMono NowChar;
 
     //PREFABS
     private GameObject linecolPrefab;
@@ -77,8 +77,11 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         StartGame();
+
+        SkillInfo skillInfo = GetSkillUtils.GetSkillInfo(3);
+        Debug.Log(skillInfo.name);
     }
-     
+
     private void Update()
     {
         InGameUpdate();
@@ -134,8 +137,8 @@ public class GameManager : Singleton<GameManager>
     {
         var one = Instantiate(charPrefab);
         var two = Instantiate(charPrefab);
-        OneChar = GetChar.getchar(0, one);
-        TwoChar = GetChar.getchar(3, two);
+        OneChar = GetSkillUtils.GetSkill(0, one);
+        TwoChar = GetSkillUtils.GetSkill(3, two);
 
         NowChar = OneChar;
         hp = OneChar.Hp + TwoChar.Hp;
@@ -406,6 +409,12 @@ public class GameManager : Singleton<GameManager>
     {
         NowChar.UseSkill();
     }
+
+    public void scene()
+    {
+        StopAllCoroutines();
+        SceneLoadManager.LoadScene(1);
+    }
 }
 
 //[인게임 추가할 것]
@@ -414,20 +423,20 @@ public class GameManager : Singleton<GameManager>
 
 //[스킬 목록]
 //
-//(이 스킬은 음과 양의 상태가 존재하며 두 개의 스킬로 취급 합니다.) SS //다이아 only
+//(이 스킬은 음과 양의 상태가 존재하며 두 개의 스킬로 취급 합니다.) SS //한번에 ??점 달성하기 && 게임 1000회 플레이
 //(음의 상태) 기본 지속 효과 : 점수 50% 보너스, 엑티브 효과: 스킬 사용시 모든 라인 클리어 (점수 절반 획득) 이후 재사용 시간동안 기본 지속 효과 비활성화 (쿨타임 30초)
 //(양의 상태) 기본 지속 효과 : 골드 50% 보너스, 엑티브 효과: 스킬 사용시 모든 적의 크기가 커지며 처치시 4배의 점수를 획득 이후 재사용 시간동안 기본 지속 효과 비활성화 (쿨타임 15초)
 //모든 라인 클리어 (점수 1.5배 획득)                              (쿨타임 30초) S Clear //누적 타일 15000개 제거
-//5초간 시야 축소 이후 라인클리어 20초간 점수 보너스 && 적이 커짐 (쿨타임 40초) S //
+//5초간 시야 축소 이후 라인클리어 20초간 점수 보너스 && 적이 커짐 (쿨타임 40초) S //한번에 ??점 달성하기 && 게임 300회 플레이
 //5초간 판정 범위 축소 이후 15초간 판정 범위가 전체로 변경        (쿨타임 40초) S //판정 증가 아이템 20회 구매
 //10초간 판정 범위에 닿는 것 만으로 지움                          (쿨타임 30초) S //별점 5점시 획득
-//스위치 시 10초 무적                                             (쿨타임 20초) S //체력 증가 아이템 20회 구매
-//10% 확률로 적이 등장할 때 마다 적용 해당 적을 빨간 적으로 변경  (스킬 상시)   S //
-//랜덤 라인 속도 느려지기 && 점수 보너스                          (스킬 상시)   A //
-//10초간 판정 범위 확대 && 점수 보너스                            (쿨타임 20초) A //
-//랜덤 라인 5초간 제외하기                                        (쿨타임 10초) A //
+//스위치 시 10초 무적                                             (쿨타임 20초) S //누적 스위치 1000회
+//10% 확률로 적이 등장할 때 마다 적용 해당 적을 빨간 적으로 변경  (스킬 상시)   S //누적 1일 플레이
+//랜덤 라인 속도 느려지기 && 점수 보너스                          (스킬 상시)   A //누적 5시간 플레이
+//10초간 판정 범위 확대 && 점수 보너스                            (쿨타임 20초) A //판정 증가 아이템 10회 구매
+//스위치시 랜덤 라인 5초간 제외                                   (쿨타임 10초) A //누적 스위치 500회
 //5초 무적                                                        (쿨타임 30초) A //누적 100번 피격
-//한 라인을 제외한 다른 모든 라인 정지 && 점수 보너스             (쿨타임 25초) A //
+//한 라인을 제외한 다른 모든 라인 정지 && 점수 보너스             (쿨타임 25초) A //체력 증가 아이템 10회 구매
 //모든 라인 속도 빨라짐 && 점수 보너스                            (스킬 상시)   B //누적 10분간 플레이
 //50%의 골드 보너스                                               (스킬 상시)   B //누적 10000골드 획득
 //5초간 보호막 생성                                               (쿨타임 15초) B //누적 50번 피격

@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class Shop : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject content;
+    public GameObject itemPrefab;
+    private List<SaleSkill> skills;
+
+    private void Awake()
     {
-        
+        SetContent();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetContent()
     {
-        
+        skills = new List<SaleSkill>();
+        for (int i = 0; i < GetSkillUtils.indexCount(); i++)
+        {
+            var n = Instantiate(itemPrefab.gameObject, content.transform);
+            SaleSkill skill = n.GetComponent<SaleSkill>();
+            skill.SetSaleSkill(i);
+            skills.Add(skill);
+        }
     }
 }

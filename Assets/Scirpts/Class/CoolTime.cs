@@ -22,6 +22,7 @@ public class CoolTime {
             nowCool += Time.deltaTime;
             yield return new WaitForFixedUpdate();
         }
+        nowCool = 0;
         isCool = false;
     }
 }

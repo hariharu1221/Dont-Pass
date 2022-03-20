@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class CurrentChar : Singleton<CurrentChar>
 {
-    private int selectCharIndex;
+    private int selectOneCharIndex;
+    private int selectTwoCharIndex;
 
-    void Start()
+    private void Awake()
     {
-        
+        SetInstance();
     }
 
     void Update()
@@ -16,9 +17,14 @@ public class CurrentChar : Singleton<CurrentChar>
         
     }
 
-    public int GetIndex()
+    public int GetOneIndex()
     {
-        return selectCharIndex;
+        return selectOneCharIndex;
+    }
+    
+    public int GetTwoIndex()
+    {
+        return selectTwoCharIndex;
     }
 }
 
