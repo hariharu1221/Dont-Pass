@@ -14,16 +14,17 @@ public class GameManager : DestructibleSingleton<GameManager>
     private SkillMono NowChar;
 
     //PREFABS
-    private GameObject linecolPrefab;
-    private GameObject linecolGroup;
-    private GameObject linePrefab;
-    private GameObject lineGroup;
-    private GameObject boxcolPrefab;
-    private GameObject boxcolGroup;
-    private GameObject hitboxPrefab;
-    private GameObject hitboxGroup;
-    private GameObject charPrefab;
-    private GameObject enemyPrefab;
+    [Header("Prefabs")]
+    [SerializeField] private GameObject linecolPrefab;
+    [SerializeField] private GameObject linecolGroup;
+    [SerializeField] private GameObject linePrefab;
+    [SerializeField] private GameObject lineGroup;
+    [SerializeField] private GameObject boxcolPrefab;
+    [SerializeField] private GameObject boxcolGroup;
+    [SerializeField] private GameObject hitboxPrefab;
+    [SerializeField] private GameObject hitboxGroup;
+    [SerializeField] private GameObject charPrefab;
+    [SerializeField] private GameObject enemyPrefab;
 
     //PATTERN
     private FixedPatternList patternString;
@@ -53,20 +54,10 @@ public class GameManager : DestructibleSingleton<GameManager>
 
     private void VariableSet()
     {
-        linecolPrefab = Resources.Load<GameObject>("Prefabs/LineCol");
-        linecolGroup = GameObject.Find("LineColGroup");
-
-        linePrefab = Resources.Load<GameObject>("Prefabs/Line");
-        lineGroup = GameObject.Find("LineGroup");
-
-        boxcolPrefab = Resources.Load<GameObject>("Prefabs/BoxCol");
-        boxcolGroup = GameObject.Find("BoxColGroup");
-
-        hitboxPrefab = Resources.Load<GameObject>("Prefabs/HitBox");
-        hitboxGroup = GameObject.Find("HitBoxGroup");
-
-        enemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy");
-        charPrefab = Resources.Load<GameObject>("Prefabs/Charater");
+        if (linecolGroup == null) linecolPrefab = GameObject.Find("LineColGroup");;
+        if (lineGroup == null) lineGroup = GameObject.Find("LineGroup");
+        if (boxcolGroup == null) boxcolGroup = GameObject.Find("BoxColGroup");
+        if (hitboxGroup == null) hitboxGroup = GameObject.Find("HitBoxGroup");
 
         patternString = Resources.Load<FixedPatternList>("SO/FixedPatternList");
         patternList = patternString.ReadAll();

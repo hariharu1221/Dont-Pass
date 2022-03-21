@@ -40,7 +40,7 @@ public abstract class SkillMono : MonoBehaviour
 
     }
 
-    public void SwitchSkill()
+    public virtual void SwitchSkill()
     {
 
     }
@@ -60,7 +60,7 @@ public class SkillInfo
 {
     public string name;
     public string skillText;
-    public Sprite sprite;
+    public string spriteAddress;
     public int index;
     public int goldPrice;
     public int gemPrice;

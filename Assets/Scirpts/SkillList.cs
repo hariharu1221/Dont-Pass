@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalChar : SkillMono
+public class NormalSkill : SkillMono
 {
     public override void Set()
     {
         info = new SkillInfo();
-        this.info.name = "normal";
+        this.info.name = "손";
         this.info.skillText = "노트를 칠 수 있는 엄청 좋은 스킬!";
-        this.info.sprite = null;
+        this.info.spriteAddress = "SkillIcon/Hand";
         this.info.index = 0;
         this.info.goldPrice = 0;
         this.info.gemPrice = 0;
@@ -31,14 +31,14 @@ public class NormalChar : SkillMono
     }
 }
 
-public class BonusChar : SkillMono
+public class Light : SkillMono
 {
     public override void Set()
     {
         info = new SkillInfo();
-        this.info.name = "Bonus";
+        this.info.name = "빛";
         this.info.skillText = "얻는 점수를 20% 상승시킵니다.";
-        this.info.sprite = null;
+        this.info.spriteAddress = "SkillIcon/Light";
         this.info.index = 1;
         this.info.goldPrice = 0;
         this.info.gemPrice = 0;
@@ -56,14 +56,14 @@ public class BonusChar : SkillMono
     }
 }
 
-public class LineClear : SkillMono
+public class Storm : SkillMono
 {
     public override void Set()
     {
         info = new SkillInfo();
-        this.info.name = "Clear random line";
+        this.info.name = "폭풍";
         this.info.skillText = "랜덤한 라인 하나를 클리어 합니다. (점수 획득 가능)";
-        this.info.sprite = null;
+        this.info.spriteAddress = "SkillIcon/Storm";
         this.info.index = 2;
         this.info.goldPrice = 2500;
         this.info.gemPrice = 60;
@@ -81,14 +81,14 @@ public class LineClear : SkillMono
     }
 }
 
-public class AllLineClear : SkillMono
+public class BlackHole : SkillMono
 {
     public override void Set()
     {
         info = new SkillInfo();
-        this.info.name = "Clear all lines";
+        this.info.name = "블랙홀";
         this.info.skillText = "모든 라인을 클리어 합니다. (점수 획득 가능)";
-        this.info.sprite = null;
+        this.info.spriteAddress = "SkillIcon/BlackHole";
         this.info.index = 3;
         this.info.goldPrice = 15000;
         this.info.gemPrice = 240;

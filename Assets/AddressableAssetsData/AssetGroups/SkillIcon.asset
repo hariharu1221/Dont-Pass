@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: SkillIcon
+  m_EditorClassIdentifier: 
+  m_GroupName: SkillIcon
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 724f860f0681522469aef3a3a1c27905
+  m_SerializeEntries:
+  - m_GUID: acee28cf6c62a1a4d85d4db2dfa0b76b
+    m_Address: SkillIcon/Hand
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 2800000, guid: acee28cf6c62a1a4d85d4db2dfa0b76b, type: 3}
+    m_TargetAsset: {fileID: 2800000, guid: acee28cf6c62a1a4d85d4db2dfa0b76b, type: 3}
+  - m_GUID: f0777a6fa5a0aea4dbf32dfb833758d9
+    m_Address: SkillIcon/Taegeuk
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 2800000, guid: f0777a6fa5a0aea4dbf32dfb833758d9, type: 3}
+    m_TargetAsset: {fileID: 2800000, guid: f0777a6fa5a0aea4dbf32dfb833758d9, type: 3}
+  - m_GUID: 5c3c814db3ad0df4ba88a591087f0671
+    m_Address: SkillIcon/BlackHole
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 2800000, guid: 5c3c814db3ad0df4ba88a591087f0671, type: 3}
+    m_TargetAsset: {fileID: 2800000, guid: 5c3c814db3ad0df4ba88a591087f0671, type: 3}
+  - m_GUID: caefcdddd63d1384bbdea43ed619fe91
+    m_Address: SkillIcon/Light
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 2800000, guid: caefcdddd63d1384bbdea43ed619fe91, type: 3}
+    m_TargetAsset: {fileID: 2800000, guid: caefcdddd63d1384bbdea43ed619fe91, type: 3}
+  - m_GUID: 90c0dc5578f8a8946a8212f1859dc1aa
+    m_Address: SkillIcon/Storm
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 2800000, guid: 90c0dc5578f8a8946a8212f1859dc1aa, type: 3}
+    m_TargetAsset: {fileID: 2800000, guid: 90c0dc5578f8a8946a8212f1859dc1aa, type: 3}
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 219594a1227b25e4c9a1d29677c5d0d0, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 04b465549f7b3e24e927689a0305f47f, type: 2}
+    - {fileID: 11400000, guid: a5c29f2520eac95448abf15407b79ebd, type: 2}

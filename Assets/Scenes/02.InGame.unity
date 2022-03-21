@@ -182,6 +182,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b52299ad48f79f438a18dba4f30f3dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linecolPrefab: {fileID: 3964648505381205195, guid: 633fcba5f10b68b4488449ff522e4a23, type: 3}
+  linecolGroup: {fileID: 1953844607}
+  linePrefab: {fileID: 2843035299077266755, guid: 6109906d45becad4681cdb56ca4bf91c, type: 3}
+  lineGroup: {fileID: 1026411040}
+  boxcolPrefab: {fileID: 517474836300945000, guid: b06ece10cfb44de498b6270c83470b80, type: 3}
+  boxcolGroup: {fileID: 405258588}
+  hitboxPrefab: {fileID: 7170650716790239905, guid: 8d27ce62c336ac24d87b91356cac33b7, type: 3}
+  hitboxGroup: {fileID: 1984238826}
+  charPrefab: {fileID: 3382647232670472677, guid: 54a15fe958452364482a1da074da0956, type: 3}
+  enemyPrefab: {fileID: 5218345657753903872, guid: ac0209e64fe55e9498a879682a7dad20, type: 3}
 --- !u!4 &286029126
 Transform:
   m_ObjectHideFlags: 0
