@@ -11,7 +11,8 @@ public class JsonUtils
         {
             Directory.CreateDirectory(SavePath);
         }
-        string saveJson = JsonUtility.ToJson(data);
+        string saveJson = EncryptAES.Encrypt256(JsonUtility.ToJson(data), "DONTPASSHARIHARU1221AES256KEY");
+        
         string saveFilePath = SavePath + saveFilename + ".json";
 
         File.WriteAllText(saveFilePath, saveJson);
@@ -25,11 +26,15 @@ public class JsonUtils
         if (!File.Exists(saveFilePath))
         {
             Debug.Log(typeof(T).Name + " »ý¼º");
-            return new T();
+            T data = new T();
+            Save<T>(data, saveFileName);
+            return data;
         }
 
-        string saveFile = File.ReadAllText(saveFilePath);
+        string saveFile = EncryptAES.Decrypt256(File.ReadAllText(saveFilePath), "DONTPASSHARIHARU1221AES256KEY");
         T saveData = JsonUtility.FromJson<T>(saveFile);
         return saveData;
     }
 }
+
+//"DONTPASSHARIHARU1221AES256KEY"

@@ -45,13 +45,22 @@ public class LineCol : MonoBehaviour
     public void LineClear()
     {
         List<EnemyMono> copy = onEnemies.ToList();
-        foreach(var enemy in copy)
+        foreach (var enemy in copy)
         {
             enemy.Death();
         }
-        //for (int i = o.Count; i >= 0; i--)
-        //{
-        //    onEnemies[i].Death();
-        // }
+    }
+
+    public void LineClear(float mult, ref float score, ref int enemyCount)
+    {
+        float sum = 0;
+        List<EnemyMono> copy = onEnemies.ToList();
+        enemyCount += copy.Count;
+        foreach (var enemy in copy)
+        {
+            sum += enemy.enemyState.score * mult;
+            enemy.Death();
+        }
+        score += sum;
     }
 }

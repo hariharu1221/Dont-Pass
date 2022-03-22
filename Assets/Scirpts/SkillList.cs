@@ -87,7 +87,7 @@ public class BlackHole : SkillMono
     {
         info = new SkillInfo();
         this.info.name = "블랙홀";
-        this.info.skillText = "모든 라인을 클리어 합니다. (점수 획득 가능)";
+        this.info.skillText = "모든 라인을 클리어 합니다. (점수 1.5배 획득)";
         this.info.spriteAddress = "SkillIcon/BlackHole";
         this.info.index = 3;
         this.info.goldPrice = 15000;
@@ -104,7 +104,7 @@ public class BlackHole : SkillMono
     {
         foreach(var line in GameManager.Instance.Line)
         {
-            line.LineClear();
+            line.LineClear(1.5f, ref GameManager.Instance.score, ref GameManager.Instance.enemyCount);
         }
     }
 }

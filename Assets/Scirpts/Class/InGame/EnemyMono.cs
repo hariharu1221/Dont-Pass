@@ -42,6 +42,7 @@ public class EnemyMono : MonoBehaviour
         if((enemyState.dir == EnemyDir.R && transform.position.x > 8.64f)
             || (enemyState.dir == EnemyDir.L && transform.position.x < -8.64f))
         {
+            GameManager.Instance.HP--;
             Death();
         }
     }

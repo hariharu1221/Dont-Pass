@@ -76,6 +76,19 @@ public class DataManager : Singleton<DataManager>
         itemData = JsonUtils.Load<OwnItemData>(ITEMDATA_FILENAME);
         userData = JsonUtils.Load<UserData>(USERDATA_FILENAME);
     }
+    
+    public void AllSave()
+    {
+        JsonUtils.Save(goodsData, GOODSDATA_FILENAME);
+        JsonUtils.Save(skillData, SKILLDATA_FILENAME);
+        JsonUtils.Save(itemData, USERDATA_FILENAME);
+        JsonUtils.Save(UserData, USERDATA_FILENAME);
+    }
+
+    private void OnApplicationQuit()
+    {
+        AllSave();
+    }
 
     public int Gold
     {

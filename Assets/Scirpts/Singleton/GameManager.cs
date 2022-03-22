@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class GameManager : DestructibleSingleton<GameManager>
 {
@@ -13,7 +14,7 @@ public class GameManager : DestructibleSingleton<GameManager>
     private SkillMono TwoChar;
     private SkillMono NowChar;
 
-    //PREFABS
+    //PREFABS && GAMEOBJECT
     [Header("Prefabs")]
     [SerializeField] private GameObject linecolPrefab;
     [SerializeField] private GameObject linecolGroup;
@@ -25,6 +26,10 @@ public class GameManager : DestructibleSingleton<GameManager>
     [SerializeField] private GameObject hitboxGroup;
     [SerializeField] private GameObject charPrefab;
     [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private TextMeshProUGUI hpCounter;
+    [SerializeField] private TextMeshProUGUI scoreCounter;
+    [SerializeField] private TextMeshProUGUI goldCounter;
+    [SerializeField] private RectTransform Counter;
 
     //PATTERN
     private FixedPatternList patternString;
@@ -37,9 +42,10 @@ public class GameManager : DestructibleSingleton<GameManager>
 
     //GAMEINFO
     private int hp;
+    public int HP { get { return hp; } set { hp = value; } }
     private int gold;
-    private int enemyCount;
-    private float score;
+    public int enemyCount;
+    public float score;
     private bool isGame;
 
     private float allMult;
@@ -58,19 +64,19 @@ public class GameManager : DestructibleSingleton<GameManager>
         if (lineGroup == null) lineGroup = GameObject.Find("LineGroup");
         if (boxcolGroup == null) boxcolGroup = GameObject.Find("BoxColGroup");
         if (hitboxGroup == null) hitboxGroup = GameObject.Find("HitBoxGroup");
+        if (hpCounter == null) hpCounter = GameObject.Find("HPCounter").GetComponentInChildren<TextMeshProUGUI>();
+        if (scoreCounter == null) scoreCounter = GameObject.Find("ScoreCounter").GetComponentInChildren<TextMeshProUGUI>();
+        if (goldCounter == null) goldCounter = GameObject.Find("CoinsCounter").GetComponentInChildren<TextMeshProUGUI>();
+        if (Counter == null) Counter = GameObject.Find("Counter").GetComponent<RectTransform>();
 
         patternString = Resources.Load<FixedPatternList>("SO/FixedPatternList");
         patternList = patternString.ReadAll();
-
         isGame = false;
     }
 
     private void Start()
     {
         StartGame();
-
-        SkillInfo skillInfo = GetSkillUtils.GetSkillInfo(3);
-        Debug.Log(skillInfo.name);
     }
 
     private void Update()
@@ -82,7 +88,7 @@ public class GameManager : DestructibleSingleton<GameManager>
     {
         if (!isGame) return;
         GetKey();
-        Debug.Log(score);
+        SetCounterText();
     }
 
     private void GetKey()
@@ -103,6 +109,13 @@ public class GameManager : DestructibleSingleton<GameManager>
         {
             UseSkill();
         }
+    }
+
+    private void SetCounterText()
+    {
+        hpCounter.text = hp.ToString();
+        scoreCounter.text =  score.ToString();
+        goldCounter.text = gold.ToString();
     }
 
     private bool GetDoubleKey(KeyCode one, KeyCode two)
@@ -149,8 +162,10 @@ public class GameManager : DestructibleSingleton<GameManager>
 
     private IEnumerator InGame() //인게임 코루틴 
     {
+        DOTween.To(() => Counter.anchoredPosition,
+            x => Counter.anchoredPosition = x, new Vector2(0, 0), 0.75f).SetEase(Ease.InCubic);
         //게임 시작 이펙트
-        while(hp > 0)
+        while (hp > 0)
         {
             if (enemyCount >= 50 * Mathf.Pow(line.Count, 2.5f) && line.Count < 5) // 1 4 9 16 25 36
             {
@@ -158,6 +173,8 @@ public class GameManager : DestructibleSingleton<GameManager>
             }
             yield return new WaitForFixedUpdate();
         }
+        DOTween.To(() => Counter.anchoredPosition,
+            x => Counter.anchoredPosition = x, new Vector2(350, 0), 0.75f).SetEase(Ease.InCubic);
         //게임 종료 이펙트
         EndGame();
         yield return null;
@@ -368,6 +385,7 @@ public class GameManager : DestructibleSingleton<GameManager>
     {
         foreach(var line in line)
         {
+            line.LineClear();
             DOTween.To(() => line.Line.Rect.sizeDelta, x => line.Line.Rect.sizeDelta = x, new Vector2(0, 5), 1f);
             StartCoroutine(Utils.DelayDestroy(line.Line.gameObject, 1.5f));
             Destroy(line.Col);
@@ -383,6 +401,13 @@ public class GameManager : DestructibleSingleton<GameManager>
         DestroyLine();
         DestroyBox();
         //결과 합산 후 ui를 통한 씬 전환
+        StartCoroutine(test());
+    }
+
+    IEnumerator test()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneLoadManager.LoadScene(1);
     }
 
     private void Switch() //현재 캐릭터 스위치 1 to 2, 2 to 1
@@ -399,12 +424,6 @@ public class GameManager : DestructibleSingleton<GameManager>
     private void UseSkill()
     {
         NowChar.UseSkill();
-    }
-
-    public void scene()
-    {
-        StopAllCoroutines();
-        SceneLoadManager.LoadScene(1);
     }
 }
 

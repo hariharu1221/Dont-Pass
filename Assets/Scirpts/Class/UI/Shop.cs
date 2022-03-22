@@ -8,7 +8,7 @@ public class Shop : MonoBehaviour
     public GameObject itemPrefab;
     private List<SaleSkill> skills;
 
-    private void Awake()
+    private void Start()
     {
         SetContent();
     }
@@ -24,4 +24,6 @@ public class Shop : MonoBehaviour
             skills.Add(skill);
         }
     }
+
+
 }

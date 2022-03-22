@@ -33,7 +33,18 @@ public class UserData : Data
 
 public class OwnSkillData : Data
 {
+    public OwnSkillData()
+    {
+        ownNormal = true;
+        ownLight = true;
+        ownStorm = false;
+        ownBlackHole = false;
+    }
 
+    public bool ownNormal;
+    public bool ownLight;
+    public bool ownStorm;
+    public bool ownBlackHole;
 }
 
 public class OwnItemData : Data

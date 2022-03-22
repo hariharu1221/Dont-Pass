@@ -17,23 +17,39 @@ public class SaleSkill : MonoBehaviour
 
     public void SetSaleSkill(int index)
     {
+        //index 보유 여부 확인 및 파괴
         skillInfo = GetSkillUtils.GetSkillInfo(index);
 
-        Addressables.LoadAssetAsync<Sprite>(skillInfo.spriteAddress).Completed +=
+        LoadImage();
+        _name.text = skillInfo.name;
+        Layer.transform.Find("gem").gameObject.SetActive(true);
+        price.text = skillInfo.gemPrice.ToString();
+    }
+
+
+    private void LoadImage()
+    {
+         Addressables.LoadAssetAsync<Sprite>(skillInfo.spriteAddress).Completed +=
             (AsyncOperationHandle<Sprite> ob) =>
             {
                 handle = ob;
                 image.sprite = ob.Result;
             };
-        _name.text = skillInfo.name;
+    }
 
-        Layer.transform.Find("gem").gameObject.SetActive(true);
-        price.text = skillInfo.gemPrice.ToString();
+    public void Buy()
+    {
+
+    }
+
+    private void OnDestroy()
+    {
+        Release();
     }
 
     public void Release()
     {
+        if (skillInfo == null) return;
         Addressables.Release(handle);
-        image.sprite = null;
     }
 }
