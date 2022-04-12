@@ -69,7 +69,7 @@ public class DataManager : Singleton<DataManager>
         LoadData();
     }
 
-    public override void LoadData()
+    protected override void LoadData()
     {
         goodsData = JsonUtils.Load<OwnGoodsData>(GOODSDATA_FILENAME);
         skillData = JsonUtils.Load<OwnSkillData>(SKILLDATA_FILENAME);

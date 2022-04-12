@@ -19,7 +19,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    public void SetInstance()
+    protected void SetInstance()
     {
         if (instance != null)
         {
@@ -36,7 +36,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    public virtual void LoadData()
+    protected virtual void LoadData()
     {
         //load interface
     }
