@@ -19,7 +19,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour //DontDestroy
         }
     }
 
-    private void SetInstance()
+    protected void SetInstance()
     {
         if (instance == this.GetComponent<T>())
         {
@@ -63,7 +63,7 @@ public class DestructibleSingleton<T> : MonoBehaviour where T : MonoBehaviour //
         }
     }
 
-    private void SetInstance()
+    protected void SetInstance()
     {
         if (instance == this.GetComponent<T>())
         {
@@ -82,7 +82,7 @@ public class DestructibleSingleton<T> : MonoBehaviour where T : MonoBehaviour //
         }
     }
 
-    public virtual void LoadData()
+    protected virtual void LoadData()
     {
         //load interface
     }

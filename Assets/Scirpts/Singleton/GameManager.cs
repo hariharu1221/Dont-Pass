@@ -60,14 +60,14 @@ public class GameManager : DestructibleSingleton<GameManager>
 
     private void VariableSet()
     {
-        if (linecolGroup == null) linecolPrefab = GameObject.Find("LineColGroup");;
-        if (lineGroup == null) lineGroup = GameObject.Find("LineGroup");
-        if (boxcolGroup == null) boxcolGroup = GameObject.Find("BoxColGroup");
-        if (hitboxGroup == null) hitboxGroup = GameObject.Find("HitBoxGroup");
-        if (hpCounter == null) hpCounter = GameObject.Find("HPCounter").GetComponentInChildren<TextMeshProUGUI>();
-        if (scoreCounter == null) scoreCounter = GameObject.Find("ScoreCounter").GetComponentInChildren<TextMeshProUGUI>();
-        if (goldCounter == null) goldCounter = GameObject.Find("CoinsCounter").GetComponentInChildren<TextMeshProUGUI>();
-        if (Counter == null) Counter = GameObject.Find("Counter").GetComponent<RectTransform>();
+        if (!linecolGroup) linecolPrefab = GameObject.Find("LineColGroup");;
+        if (!lineGroup) lineGroup = GameObject.Find("LineGroup");
+        if (!boxcolGroup) boxcolGroup = GameObject.Find("BoxColGroup");
+        if (!hitboxGroup) hitboxGroup = GameObject.Find("HitBoxGroup");
+        if (!hpCounter) hpCounter = GameObject.Find("HPCounter").GetComponentInChildren<TextMeshProUGUI>();
+        if (!scoreCounter) scoreCounter = GameObject.Find("ScoreCounter").GetComponentInChildren<TextMeshProUGUI>();
+        if (!goldCounter) goldCounter = GameObject.Find("CoinsCounter").GetComponentInChildren<TextMeshProUGUI>();
+        if (!Counter) Counter = GameObject.Find("Counter").GetComponent<RectTransform>();
 
         patternString = Resources.Load<FixedPatternList>("SO/FixedPatternList");
         patternList = patternString.ReadAll();
@@ -116,17 +116,6 @@ public class GameManager : DestructibleSingleton<GameManager>
         hpCounter.text = hp.ToString();
         scoreCounter.text =  score.ToString();
         goldCounter.text = gold.ToString();
-    }
-
-    private bool GetDoubleKey(KeyCode one, KeyCode two)
-    {
-        if  ((Input.GetKey(one) && Input.GetKeyDown(two))
-          || (Input.GetKeyDown(one) && Input.GetKey(two))
-          || (Input.GetKeyDown(one) && Input.GetKeyDown(two))) 
-        {
-            return true;
-        }
-        return false;
     }
 
     private void StartGame() //게임 시작
