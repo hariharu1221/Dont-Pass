@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+public class Singleton<T> : MonoBehaviour where T : MonoBehaviour //DontDestroy
 {
     private static T instance;
     public static T Instance
@@ -47,7 +47,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     }
 }
 
-public class DestructibleSingleton<T> : MonoBehaviour where T : MonoBehaviour
+public class DestructibleSingleton<T> : MonoBehaviour where T : MonoBehaviour //씬전환시 삭제
 {
     private static T instance;
     public static T Instance
