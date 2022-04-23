@@ -21,6 +21,8 @@ public abstract class SkillMono : MonoBehaviour
         set { cool = value; }
     }
 
+    public readonly BuffType Type = BuffType.Invincibility;
+
     private void Awake()
     {
         Set();
