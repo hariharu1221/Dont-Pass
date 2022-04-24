@@ -7,12 +7,14 @@ public class EventManager : Singleton<EventManager>
 {
     private Dictionary<string, GameEvent> EventPair = new Dictionary<string, GameEvent>();
     private Dictionary<string, GameEvent<int>> IntEventPair = new Dictionary<string, GameEvent<int>>();
+    private Dictionary<string, GameEvent<float>> FloatEventPair = new Dictionary<string, GameEvent<float>>();
 
     private void Awake()
     {
         SetInstance(); 
     }
 
+    //일반 이벤트 함수 추가
     public void RegisterListener(Action listener, string key)
     {
         try
@@ -26,23 +28,34 @@ public class EventManager : Singleton<EventManager>
         {
             Debug.LogError(ex.Message);
         }
-    }
+    } 
 
+    //매개변수가 존재하는 이벤트 함수 추가
     public void RegisterListener<T>(Action<T> listener, string key)
     {
         if (typeof(T) == typeof(int))
         {
-            object obj = IntEventPair;
-            RegisterListener(listener, key, ref obj);
+            Action<int> listen = listener as Action<int>;
+            RegisterListener(listen, key, ref IntEventPair);
         }
-    }
+        else if (typeof(T) == typeof(float))
+        {
+            Action<float> action = listener as Action<float>;
+            RegisterListener(action, key, ref FloatEventPair);
+        }
+        else
+        {
+            throw new Exception("type of T does not exist");
+        }
+    } 
 
-    public void RegisterListener<T>(Action<T> listener, string key, ref object eventPair)
+    //반복되는 문장 함수화
+    private void RegisterListener<T>(Action<T> listener, string key, ref Dictionary<string, GameEvent<T>> eventPair) 
     {
         try
         {
             if (EventPair.ContainsKey(key))
-                (eventPair as Dictionary<string, GameEvent<T>>)[key].RegisterListener(listener);
+                eventPair[key].RegisterListener(listener);
             else
                 throw new Exception("Key value does not exist!");
         }
@@ -71,46 +84,43 @@ public class EventManager : Singleton<EventManager>
     {
         if (typeof(T) == typeof(int))
         {
-            object obj = IntEventPair;
-            UnRegisterListener(listener, key, ref obj);
+            Action<int> action = listener as Action<int>;
+            UnRegisterListener(action, key, ref IntEventPair);
+        }
+        else if (typeof(T) == typeof(float))
+        {
+            Action<float> action = listener as Action<float>;
+            UnRegisterListener(action, key, ref FloatEventPair);
+        }
+        else
+        {
+            throw new Exception("type of T does not exist");
         }
     }
 
-    public void UnRegisterListener<T>(Action<T> listener, string key, ref object eventPair)
+    private void UnRegisterListener<T>(Action<T> listener, string key, ref Dictionary<string, GameEvent<T>> eventPair)
     {
         try
         {
             if (EventPair.ContainsKey(key))
-                (eventPair as Dictionary<string, GameEvent<T>>)[key].UnRegisterListener(listener);
+                eventPair[key].UnRegisterListener(listener);
             else
                 throw new Exception("Key value does not exist!");
         }
-        catch (NullReferenceException ex)
+        catch (Exception ex)
         {
             Debug.LogError(ex.Message);
         }
     }
-    
-
-
-    //public void UnRegisterListener<T>(Action<T> listener, string key, ref Dictionary<string, GameEvent<T>> eventPair) 
-    //{
-    //    try
-    //    {
-    //        if (EventPair.ContainsKey(key))
-    //            eventPair[key].UnRegisterListener(listener);
-    //        else
-    //            throw new Exception("Key value does not exist!");
-    //    }
-    //    catch (NullReferenceException ex)
-    //    {
-    //        Debug.LogError(ex.Message);
-    //    }
-    //}
 
     public void AddEvent(ref GameEvent gameEvent)
     {
         EventPair.Add(gameEvent.key, gameEvent);
+    }
+
+    public void RemoveEvent(ref GameEvent gameEvent)
+    {
+        EventPair.Remove(gameEvent.key);
     }
 }
 
@@ -119,12 +129,12 @@ public class GameEvent<T>
     private event Action<T> onEvent;
     public string key;
 
-    public void RegisterListener(Action<T> listener)
+    public void RegisterListener(Action<T> listener) //이벤트에 함수 추가
     {
         onEvent += listener;
     }
 
-    public void UnRegisterListener(Action<T> listener)
+    public void UnRegisterListener(Action<T> listener) //이벤트에서 함수 제거
     {
         try
         {
@@ -136,7 +146,7 @@ public class GameEvent<T>
         }
     }
 
-    public void BroadcastEvent(T eventData)
+    public void BroadcastEvent(T eventData) //이벤트 실행
     {
         onEvent?.Invoke(eventData);
     }
@@ -168,10 +178,4 @@ public class GameEvent
     {
         onEvent?.Invoke();
     }
-}
-
-public enum EventType
-{
-    Normal,
-    Quest
 }
