@@ -14,7 +14,7 @@ public class EventManager : Singleton<EventManager>
         SetInstance(); 
     }
 
-    //ÀÏ¹İ ÀÌº¥Æ® ÇÔ¼ö Ãß°¡
+    //ì¼ë°˜ ì´ë²¤íŠ¸ í•¨ìˆ˜ ì¶”ê°€
     public void RegisterListener(Action listener, string key)
     {
         try
@@ -30,7 +30,7 @@ public class EventManager : Singleton<EventManager>
         }
     } 
 
-    //¸Å°³º¯¼ö°¡ Á¸ÀçÇÏ´Â ÀÌº¥Æ® ÇÔ¼ö Ãß°¡
+    //ë§¤ê°œë³€ìˆ˜ê°€ ì¡´ì¬í•˜ëŠ” ì´ë²¤íŠ¸ í•¨ìˆ˜ ì¶”ê°€
     public void RegisterListener<T>(Action<T> listener, string key)
     {
         if (typeof(T) == typeof(int))
@@ -49,8 +49,8 @@ public class EventManager : Singleton<EventManager>
         }
     } 
 
-    //¹İº¹µÇ´Â ¹®Àå ÇÔ¼öÈ­
-    private void RegisterListener<T>(Action<T> listener, string key, ref Dictionary<string, GameEvent<T>> eventPair) 
+    //ë°˜ë³µë˜ëŠ” ë¬¸ì¥ í•¨ìˆ˜í™”
+    private void RegisterListener<T>(Action<T> listener, string key, Dictionary<string, GameEvent<T>> eventPair) 
     {
         try
         {
@@ -98,7 +98,7 @@ public class EventManager : Singleton<EventManager>
         }
     }
 
-    private void UnRegisterListener<T>(Action<T> listener, string key, ref Dictionary<string, GameEvent<T>> eventPair)
+    private void UnRegisterListener<T>(Action<T> listener, string key, Dictionary<string, GameEvent<T>> eventPair)
     {
         try
         {
@@ -113,12 +113,12 @@ public class EventManager : Singleton<EventManager>
         }
     }
 
-    public void AddEvent(ref GameEvent gameEvent)
+    public void AddEvent(GameEvent gameEvent)
     {
         EventPair.Add(gameEvent.key, gameEvent);
     }
 
-    public void RemoveEvent(ref GameEvent gameEvent)
+    public void RemoveEvent(GameEvent gameEvent)
     {
         EventPair.Remove(gameEvent.key);
     }
@@ -129,12 +129,12 @@ public class GameEvent<T>
     private event Action<T> onEvent;
     public string key;
 
-    public void RegisterListener(Action<T> listener) //ÀÌº¥Æ®¿¡ ÇÔ¼ö Ãß°¡
+    public void RegisterListener(Action<T> listener) //ì´ë²¤íŠ¸ì— í•¨ìˆ˜ ì¶”ê°€
     {
         onEvent += listener;
     }
 
-    public void UnRegisterListener(Action<T> listener) //ÀÌº¥Æ®¿¡¼­ ÇÔ¼ö Á¦°Å
+    public void UnRegisterListener(Action<T> listener) //ì´ë²¤íŠ¸ì—ì„œ í•¨ìˆ˜ ì œê±°
     {
         try
         {
@@ -146,7 +146,7 @@ public class GameEvent<T>
         }
     }
 
-    public void BroadcastEvent(T eventData) //ÀÌº¥Æ® ½ÇÇà
+    public void BroadcastEvent(T eventData) //ì´ë²¤íŠ¸ ì‹¤í–‰
     {
         onEvent?.Invoke(eventData);
     }
