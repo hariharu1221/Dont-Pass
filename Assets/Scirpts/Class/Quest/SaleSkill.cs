@@ -42,6 +42,8 @@ public class SaleSkill : MonoBehaviour
 
     }
 
+
+
     private void OnDestroy()
     {
         Release();

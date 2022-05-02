@@ -36,12 +36,12 @@ public class EventManager : Singleton<EventManager>
         if (typeof(T) == typeof(int))
         {
             Action<int> listen = listener as Action<int>;
-            RegisterListener(listen, key, ref IntEventPair);
+            RegisterListener(listen, key, IntEventPair);
         }
         else if (typeof(T) == typeof(float))
         {
             Action<float> action = listener as Action<float>;
-            RegisterListener(action, key, ref FloatEventPair);
+            RegisterListener(action, key, FloatEventPair);
         }
         else
         {
@@ -85,12 +85,12 @@ public class EventManager : Singleton<EventManager>
         if (typeof(T) == typeof(int))
         {
             Action<int> action = listener as Action<int>;
-            UnRegisterListener(action, key, ref IntEventPair);
+            UnRegisterListener(action, key, IntEventPair);
         }
         else if (typeof(T) == typeof(float))
         {
             Action<float> action = listener as Action<float>;
-            UnRegisterListener(action, key, ref FloatEventPair);
+            UnRegisterListener(action, key, FloatEventPair);
         }
         else
         {
